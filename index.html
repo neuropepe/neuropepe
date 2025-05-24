@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEUROPEPE - AI Meme Token</title>
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            overflow-x: hidden;
+            color: white;
+            background-color: #000;
+            line-height: 1;
+        }
+
+        /* Video Background */
+        .video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background: #000;
+        }
+        
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        /* Sections */
+        .section {
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+            isolation: isolate;
+        }
+
+        .section + .section {
+            margin-top: -1px !important;
+        }
+
+        #section1 {
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1;
+        }
+
+        /* Menu Styles */
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            cursor: pointer;
+            width: 30px;
+            height: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .menu-btn span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background: white;
+            transition: 0.4s;
+        }
+        
+        .menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+        
+        .menu {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 250px;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 999;
+            transition: 0.5s;
+            padding-top: 70px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .menu.active {
+            left: 0;
+        }
+        
+        .menu ul {
+            list-style: none;
+            padding: 0 20px;
+        }
+        
+        .menu li {
+            margin: 25px 0;
+        }
+        
+        .menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: 0.3s;
+            display: block;
+            padding: 5px 0;
+        }
+        
+        .menu a:hover {
+            color: #00FF00;
+            transform: translateX(5px);
+        }
+        
+        .language-selector {
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        
+        .language-selector select {
+            width: 100%;
+            padding: 10px;
+            background: #111;
+            color: white;
+            border: 1px solid #00FF00;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        /* Content Styles */
+        .welcome {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 800px;
+            width: 100%;
+        }
+        
+        .welcome h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #00FF00;
+        }
+        
+        .welcome p {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        /* Price Ticker */
+        .price-section {
+            width: 100%;
+            background: linear-gradient(90deg, #00FF00, #008000);
+            padding: 10px 0;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .price-ticker {
+            display: flex;
+            overflow: hidden;
+        }
+        
+        .price-scroll {
+            display: flex;
+            animation: scroll 40s linear infinite;
+        }
+        
+        .price-item {
+            display: flex;
+            align-items: center;
+            margin: 0 20px;
+            color: #000;
+            font-weight: bold;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        
+        .price-item img {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            background: #000;
+            border-radius: 50%;
+            padding: 2px;
+        }
+        
+        .neuropepe-price {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            margin: 10px auto;
+            max-width: 280px;
+            border: 2px solid #00FF00;
+        }
+        
+        .neuropepe-price h3 {
+            color: #00FF00;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+        
+        .price-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .welcome h1 {
+                font-size: 1.8rem;
+            }
+            
+            .price-item {
+                margin: 0 15px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hamburger Menu -->
+    <div class="menu-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    
+    <div class="menu">
+        <div class="language-selector">
+            <select id="language">
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+                <option value="zh">中文</option>
+                <option value="ru">Русский</option>
+                <option value="es">Español</option>
+                <option value="ar">العربية</option>
+            </select>
+        </div>
+        <ul>
+            <li><a href="#section2" class="menu-link">Connect Wallet</a></li>
+            <li><a href="#section4" class="menu-link">Whitepaper</a></li>
+            <li><a href="#section3" class="menu-link">Exchanges</a></li>
+            <li><a href="#section5" class="menu-link">Community</a></li>
+        </ul>
+    </div>
+
+    <!-- Video Background -->
+    <div class="video-container">
+        <video autoplay muted loop playsinline>
+            <!-- Video source would go here -->
+        </video>
+    </div>
+
+    <!-- Section 1: Welcome -->
+    <div class="section" id="section1">
+        <div class="welcome">
+            <h1>WELCOME TO NEUROPEPE</h1>
+            <p>The AI-Powered Meme Token Revolution</p>
+            <p>Launching on Solana</p>
+        </div>
+    </div>
+    
+    <!-- Price Ticker Section -->
+    <div class="price-section">
+        <div class="price-ticker">
+            <div class="price-scroll">
+                <div class="price-item">
+                    <span>BTC: $<span class="btc-price">67,420</span></span>
+                </div>
+                <div class="price-item">
+                    <span>ETH: $<span class="eth-price">3,250</span></span>
+                </div>
+                <div class="price-item">
+                    <span>BNB: $<span class="bnb-price">580</span></span>
+                </div>
+                <div class="price-item">
+                    <span>XRP: $<span class="xrp-price">0.52</span></span>
+                </div>
+                <div class="price-item">
+                    <span>SOL: $<span class="sol-price">140</span></span>
+                </div>
+                <div class="price-item">
+                    <span>ADA: $<span class="ada-price">0.45</span></span>
+                </div>
+                <!-- Duplicates for smooth scrolling -->
+                <div class="price-item">
+                    <span>BTC: $<span class="btc-price">67,420</span></span>
+                </div>
+                <div class="price-item">
+                    <span>ETH: $<span class="eth-price">3,250</span></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="neuropepe-price">
+            <h3>NEUROPEPE PRICE</h3>
+            <div class="price-value">★★★★☆</div>
+            <small>Coming Soon</small>
+        </div>
+    </div>
+    
+    <!-- Other Sections -->
+    <div class="section" id="section2">
+        <a href="https://pump.fun" class="connect-wallet" target="_blank">
+            CONNECT WALLET & BUY TOKEN
+        </a>
+    </div>
+    
+    <div class="section" id="section3">
+        <div class="exchange-section">
+            <h2>COMING SOON TO THESE EXCHANGES</h2>
+            <div class="exchange-scroll">
+                <div class="exchange-scroll-inner">
+                    <div class="exchange-item">
+                        <span>Bybit</span>
+                    </div>
+                    <div class="exchange-item">
+                        <span>KuCoin</span>
+                    </div>
+                    <div class="exchange-item">
+                        <span>Binance</span>
+                    </div>
+                    <div class="exchange-item">
+                        <span>Uniswap</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section" id="section5">
+        <div class="community-container">
+            <h2>JOIN OUR COMMUNITY</h2>
+            <div class="social-links">
+                <a href="https://t.me/neuropepe1" target="_blank">Telegram</a>
+                <a href="https://twitter.com/neuropepe1" target="_blank">Twitter</a>
+            </div>
+            <div class="disclaimer">
+                <h3>DISCLAIMER</h3>
+                <p>Cryptocurrency investments involve high risk.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Menu Toggle
+        const menuBtn = document.querySelector('.menu-btn');
+        const menu = document.querySelector('.menu');
+        
+        menuBtn.addEventListener('click', () => {
+            menuBtn.classList.toggle('active');
+            menu.classList.toggle('active');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!menu.contains(e.target) && !menuBtn.contains(e.target)) {
+                menuBtn.classList.remove('active');
+                menu.classList.remove('active');
+            }
+        });
+
+        // Simulate price updates
+        function updatePrices() {
+            const cryptos = ['btc', 'eth', 'bnb', 'xrp', 'sol', 'ada'];
+            cryptos.forEach(crypto => {
+                const elements = document.querySelectorAll(`.${crypto}-price`);
+                const randomChange = (Math.random() * 0.1 - 0.05).toFixed(2);
+                elements.forEach(el => {
+                    const current = parseFloat(el.textContent.replace(/,/g, ''));
+                    const newPrice = (current * (1 + parseFloat(randomChange))).toLocaleString('en-US', {
+                        maximumFractionDigits: 2
+                    });
+                    el.textContent = newPrice;
+                });
+            });
+            
+            setTimeout(updatePrices, 10000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updatePrices();
+            
+            // Force video play
+            const video = document.querySelector('video');
+            if (video) {
+                video.play().catch(e => {
+                    console.log("Autoplay prevented");
+                });
+            }
+        });
+    </script>
+</body>
+</html>
