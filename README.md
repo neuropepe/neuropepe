@@ -1,16 +1,27 @@
-## Hi there 👋
+# 🐸 NEUROPEPE - AI Meme Token Ecosystem
 
-<!--
-**neuropepe/neuropepe** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+![NeuroPepe Banner](assets/images/banner.gif)
 
-Here are some ideas to get you started:
+> Next-gen meme token merging AI utility with viral Pepe culture on Solana
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+## ✨ Core Features
+| Feature           | Tech Stack       | Status  |
+|-------------------|------------------|---------|
+| Dynamic UI        | CSS3, GSAP       | ✅ Live |
+| Multi-language    | i18n JavaScript  | ✅ v1.2 |
+| Price API         | CoinGecko API    | 🔄 Live |
+| Wallet Connect    | Solana Web3.js   | ✅ Live |
+| Whitepaper        | PDF.js           | ✅ v2.1 |
+
+## 🏗️ Project Architecture
+```bash
+.
+├── index.html              # Main entry point
+├── assets/
+│   ├── css/                # Optimized styles
+│   ├── js/                 # Modular scripts
+│   ├── locales/            # Translation files
+│   └── images/             # WebP optimized
+├── docs/
+│   └── whitepaper_v2.pdf   # Compressed PDF
+└── CNAME                   # Custom domain
